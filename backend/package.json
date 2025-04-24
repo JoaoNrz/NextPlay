@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend aplicacao NextPlay",
+  "license": "ISC",
+  "author": "Joao Pedro",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "nao ha"
+  }
+}
