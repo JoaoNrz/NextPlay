@@ -2,6 +2,12 @@ import express from 'express'
 import path from 'path'
 import dotenv from 'dotenv'
 import __dirname from './utils/pathUtils.js';
+import {
+    staticMiddleware,
+    urlencodedMiddleware, jsonMiddleware,
+    securityMiddleware, compressionMiddlewware,
+    rateLimitMiddleware
+} from './middlewares/middlewares.js';
 
 
 //CARREGAR AS VARIAVEIS DO .ENV
@@ -20,7 +26,7 @@ app.get('/',(req,res)=>{
         <html>
             <head><title>NextPlay</title></head>
             <body>
-                <h1>Hello World</h1>
+                <h1>Hello World!</h1>
             </body>
         </html>
     `);
