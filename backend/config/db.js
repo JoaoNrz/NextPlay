@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const conectBD = async()=>{
     try{
         const uri = process.env.MONGODB_URI;
@@ -12,6 +11,5 @@ const conectBD = async()=>{
         process.exit(1) //finaliza a aplicação
     }
 }
-
 
 export default conectBD;
