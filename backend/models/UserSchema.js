@@ -4,7 +4,8 @@ const UserSchema = new moongose.Schema({
 
     nome:{
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     email:{
         type: String,
@@ -44,5 +45,5 @@ const UserSchema = new moongose.Schema({
         timestamps: true
     });
 
-const User = moongose.model('User', UserSchema);
-module.exports = User;
+const UserModel = moongose.model('User', UserSchema);
+module.exports = UserModel;

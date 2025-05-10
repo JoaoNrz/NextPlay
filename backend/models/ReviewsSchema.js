@@ -26,5 +26,5 @@ const ReviewsSchema = new moongose.Schema({
         timestamps: true
     });
 
-const Reviews = moongose.model('Reviews', ReviewsSchema);
-module.exports = Reviews;
+const ReviewsModel = moongose.model('Reviews', ReviewsSchema);
+module.exports = ReviewsModel;

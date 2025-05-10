@@ -29,10 +29,6 @@ const JogosSchema = new moongose.Schema({
     plataformas:{
         type: [String],
     },
-    nota:{
-        type: Number,
-        default: 0
-    },
     metacritic:{
         type: Number,
         default: 0
@@ -47,5 +43,5 @@ const JogosSchema = new moongose.Schema({
         timestamps: true
     });
 
-const Jogos = moongose.model('Jogos', JogosSchema);
-module.exports = Jogos;
+const JogosModel = moongose.model('Jogos', JogosSchema);
+module.exports = JogosModel;
