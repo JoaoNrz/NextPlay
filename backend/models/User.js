@@ -53,6 +53,7 @@ class User {
     static async updateUser(id, updateData){
         return await UserModel.findByIdAndUpdate(id, updateData, { new: true });
     }
+
 }
 
 export default User;

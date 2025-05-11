@@ -88,6 +88,72 @@ class UserController {
             res.status(500).json({ message: 'Erro ao atualizar usuário.' });
         }
     }
+
+    //ADD WISHLIST
+    static async addToWishlist(req, res) {
+        console.log("Rota PUT /user/:id/wishlist/:jogoId foi acessada");
+
+        try {
+            const { id, jogoId } = req.params; // Obtendo userId e jogoId da URL
+            console.log(id, jogoId);
+            const updatedUser = await User.updateUser(
+                id,
+                { $addToSet: { wishlist: jogoId } },
+                { new: true }
+            );
+
+            if (!updatedUser) {
+                return res.status(404).json({ message: 'Usuário não encontrado.' });
+            }
+
+            res.status(200).json({ message: 'Jogo adicionado à wishlist!', updatedUser });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro ao adicionar jogo à wishlist.' });
+        }
+    }
+
+    //REMOVE WISHLIST
+    static async removeFromWishlist(req, res) {
+        try {
+            const { id, jogoId } = req.params; // Obtendo userId e jogoId da URL
+            const updatedUser = await User.updateUser(
+                id,
+                { $pull: { wishlist: jogoId } },
+                { new: true }
+            );
+
+            if (!updatedUser) {
+                return res.status(404).json({ message: 'Usuário não encontrado.' });
+            }
+
+            res.status(200).json({ message: 'Jogo removido da wishlist!', updatedUser });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro ao remover jogo da wishlist.' });
+        }
+    }
+
+    //ADD BIBLIOTECA
+    static async addToBiblioteca(req, res) {
+        try {
+            const { id, jogoId } = req.params; // Obtendo userId e jogoId da URL
+            const updatedUser = await User.updateUser(
+                id,
+                { $addToSet: { biblioteca: jogoId } },
+                { new: true }
+            );
+
+            if (!updatedUser) {
+                return res.status(404).json({ message: 'Usuário não encontrado.' });
+            }
+
+            res.status(200).json({ message: 'Jogo adicionado à biblioteca!', updatedUser });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro ao adicionar jogo à biblioteca.' });
+        }
+    }
 }
 
 export default UserController;

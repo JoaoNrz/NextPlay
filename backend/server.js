@@ -26,7 +26,7 @@ const port = process.env.PORT;
 app.use(staticMiddleware);
 app.use(urlencodedMiddleware);
 app.use(jsonMiddleware);
-app.use(securityMiddleware);
+//app.use(securityMiddleware);
 app.use(compressionMiddlewware);
 //app.use(rateLimitMiddleware);
 

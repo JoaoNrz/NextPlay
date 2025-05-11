@@ -1,5 +1,7 @@
 import { ExplainVerbosity } from 'mongodb';
 import ReviewsModel from './ReviewsSchema.js';
+import User from './User.js';
+import Jogos from './Jogos.js';
 
     class Reviews {
         constructor(comentario, nota, usuario, jogo) {
@@ -17,6 +19,11 @@ import ReviewsModel from './ReviewsSchema.js';
                 usuario: this.usuario,
                 jogo: this.jogo
             });
+        
+            await User.updateUser(this.usuario, { $push: { avaliacoes: novaReview._id } });
+
+            await Jogos.updateJogo(this.jogo, { $push: { avaliacoes: novaReview._id } });
+
             return await novaReview.save();
         }
 
