@@ -23,7 +23,7 @@ import ReviewsModel from './ReviewsSchema.js';
         //BUSCAS
         //all
         static async findAll() {
-            return await ReviewsModel.find();
+            return await ReviewsModel.find().populate('usuario').populate('jogo');
         }
 
         //notas maiores
@@ -37,12 +37,12 @@ import ReviewsModel from './ReviewsSchema.js';
         }
 
         //DELETE
-        deleteById(id) {
+        static async deleteById(id) {
             return ReviewsModel.findByIdAndDelete(id);
         }
 
         //ATT
-        async updateById(id, updatedData) {
+        static async updateById(id, updatedData) {
             return await ReviewsModel.findByIdAndUpdate(id, updatedData, { new: true });
         }
     }
