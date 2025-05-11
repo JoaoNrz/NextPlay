@@ -1,5 +1,4 @@
-const moongose = require('mongoose');
-const { prependListener } = require('./UserSchema');
+import moongose from 'mongoose';
 
 const JogosSchema = new moongose.Schema({
     titulo:{
@@ -44,4 +43,4 @@ const JogosSchema = new moongose.Schema({
     });
 
 const JogosModel = moongose.model('Jogos', JogosSchema);
-module.exports = JogosModel;
+export default JogosModel;

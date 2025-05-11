@@ -90,3 +90,5 @@ class ReviewsController {
         }
     }
 }
+
+export default ReviewsController;

@@ -1,30 +1,30 @@
-const moongose = require('mongoose');
+import mongoose from 'mongoose'; 
 
-const ReviewsSchema = new moongose.Schema({
+const ReviewsSchema = new mongoose.Schema({
 
-    comentario:{
+    comentario: {
         type: String,
         required: true
     },
-    nota:{
+    nota: {
         type: Number,
         required: true,
         min: 0,
         max: 5
     },
-    usuario:{
-        type: moongose.Schema.Types.ObjectId,
+    usuario: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    jogo:{
-        type: moongose.Schema.Types.ObjectId,
+    jogo: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Jogos',
         required: true
-    }},
-    {
-        timestamps: true
-    });
+    }
+}, {
+    timestamps: true
+});
 
-const ReviewsModel = moongose.model('Reviews', ReviewsSchema);
-module.exports = ReviewsModel;
+const ReviewsModel = mongoose.model('Reviews', ReviewsSchema);
+export default ReviewsModel;

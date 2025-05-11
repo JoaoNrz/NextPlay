@@ -9,6 +9,9 @@ import {
     rateLimitMiddleware
 } from './middlewares/middlewares.js';
 import conectBD from './config/db.js';
+import routerJogos from './routes/jogosRoutes.js';
+import routerUser from './routes/userRoutes.js';
+import routerReviews from './routes/reviewsRoutes.js';
 
 
 //CARREGAR AS VARIAVEIS DO .ENV
@@ -26,6 +29,10 @@ app.use(jsonMiddleware);
 app.use(securityMiddleware);
 app.use(compressionMiddlewware);
 //app.use(rateLimitMiddleware);
+
+app.use(routerJogos);
+app.use(routerUser);
+app.use(routerReviews);
 
 app.listen(port,()=>{
     console.log(`Servidor rodando na porta ${port}`);

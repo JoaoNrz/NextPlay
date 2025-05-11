@@ -1,49 +1,43 @@
-const moongose = require('mongoose');
+import mongoose from 'mongoose'; // ✅ Nome correto
 
-const UserSchema = new moongose.Schema({
-
-    nome:{
+const UserSchema = new mongoose.Schema({ // agora usa mongoose aqui também
+    nome: {
         type: String,
         required: true,
         unique: true
     },
-    email:{
+    email: {
         type: String,
         required: true,
         unique: true
     },
-    senha:{
+    senha: {
         type: String,
         required: true
     },
-    isAdmin:{
+    isAdmin: {
         type: Boolean,
         default: false
     },
-    dataCadastro:{
+    dataCadastro: {
         type: Date,
         default: Date.now
     },
-
-    // Jogos que o usuário comprou
     biblioteca: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Jogos'
     }],
-    // Jogos que o usuario deseja comprar
     wishlist: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Jogos'
     }],
-    // Avaliações que o usuário fez
     avaliacoes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reviews'
-    }],
-    },
-    {
-        timestamps: true
-    });
+    }]
+}, {
+    timestamps: true
+});
 
-const UserModel = moongose.model('User', UserSchema);
-module.exports = UserModel;
+const UserModel = mongoose.model('User', UserSchema);
+export default UserModel;
