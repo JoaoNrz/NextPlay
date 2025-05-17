@@ -9,6 +9,7 @@
         <div class="extramsg">
           <p>Sua nova plataforma completa para gestão de jogos</p>
         </div>
+        <ListarJogos />
       </div>
     </div>
 
@@ -18,12 +19,14 @@
 <script>
   import HeaderComp from '../components/HeaderComp.vue'
   import NavBar from '../components/NavBar.vue'
+  import ListarJogos from '../components/ListarJogos.vue'
 
     export default {
     name: 'HomeComp',
     components: {
       HeaderComp,
-      NavBar
+      NavBar,
+      ListarJogos
     }
   }
 </script>
@@ -33,6 +36,7 @@
     .home{
       display: flex;
       justify-content: center;
+      height: 100%;
     }
 
     .home-content {
@@ -44,6 +48,7 @@
     }
     .main-content {
         width: 85%;
+        height: 100%;
     }
 
     .main-content h1 {
