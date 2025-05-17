@@ -39,7 +39,7 @@ export default {
     .header{
         width: 100%;
         height: 110px;
-        background-color: #000000;
+        background-color: #151515;
         display: flex;
         justify-content: center;
     }
@@ -57,7 +57,7 @@ export default {
     .user-icon {
         width: 40px;
         height: 40px;
-        background: linear-gradient(90deg, #ff2289 0%, #f86b0d 100%);
+        background: linear-gradient(90deg, #ff39a6 0%, #ff8c3f 100%);
         border-radius: 50%;
         display: flex;
         align-items: center;
