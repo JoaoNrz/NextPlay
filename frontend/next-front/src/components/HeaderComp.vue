@@ -9,9 +9,15 @@
                 <input type="text" placeholder="Pesquisar jogos..." />
             </div>
 
+
             <!-- Ícone do usuário -->
             <div class="user-icon">
                 J
+            </div>
+
+            <div class="icons">
+                <img src="../assets/images/bell.png" alt="">
+                <img src="../assets/images/grocery-store.png" alt="">
             </div>
         </div>
   </header>
@@ -32,26 +38,60 @@ export default {
 <style scoped>
     .header{
         width: 100%;
-        height: 60px;
+        height: 110px;
+        background-color: #000000;
+        display: flex;
+        justify-content: center;
     }
 
     .container{
+        max-width: 95%;
         width: 100%;
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-around;
         align-items: center;
         padding:10px 20px;
+        height: 100%;
     }
 
     .user-icon {
         width: 40px;
         height: 40px;
-        background-color: #007bff;
+        background: linear-gradient(90deg, #ff2289 0%, #f86b0d 100%);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 600;
         font-size: 18px;
+    }
+
+    .logo {
+        font-size: 28px;
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .search-bar {
+        width: 100%;
+        max-width: 900px;
+        align-items: center;
+    }
+
+    .search-bar input {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        background-color: #e6e6e633;
+        border-radius: 20px;
+        padding: 15px;
+        border:unset;
+        font-size: 14px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .icons{
+        display: flex;
+        gap: 25px;
     }
 </style>
