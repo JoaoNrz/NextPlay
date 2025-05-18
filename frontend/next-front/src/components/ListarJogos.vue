@@ -43,8 +43,7 @@
 
     .game-card-medium{
         width: 30%;
-        height: 300px;
-        border-radius: 10px;
+        background-color: #202020;
     }
 
     .game-card-medium-media{
@@ -61,8 +60,9 @@
     }
 
     .game-card-medium-info{
-        padding: 8px 18px;
+        padding: 10px 18px;
         background-color: #202020;
+        border-radius: 0px 0px 10px 10px;
     }
 
     .game-card-info-plataforms{

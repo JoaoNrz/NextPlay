@@ -9,24 +9,28 @@
         <div class="extramsg">
           <p>Sua nova plataforma completa para gestão de jogos</p>
         </div>
-        <ListarJogos />
+        <div>
+          <ListarJogos />
+        </div>
       </div>
     </div>
-
   </div>
+  <FooterComp />
 </template>
 
 <script>
   import HeaderComp from '../components/HeaderComp.vue'
   import NavBar from '../components/NavBar.vue'
   import ListarJogos from '../components/ListarJogos.vue'
+  import FooterComp from '../components/FooterComp.vue'
 
     export default {
     name: 'HomeComp',
     components: {
       HeaderComp,
       NavBar,
-      ListarJogos
+      ListarJogos,
+      FooterComp
     }
   }
 </script>
@@ -36,19 +40,18 @@
     .home{
       display: flex;
       justify-content: center;
-      height: 100%;
     }
 
     .home-content {
         display: flex;
         align-items: start;
         justify-content: center;
-        padding: 20px 0px;
+        padding: 20px 0px 50px 0px;
         width: 95%;
     }
     .main-content {
         width: 85%;
-        height: 100%;
+        flex: 1;
     }
 
     .main-content h1 {
