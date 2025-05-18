@@ -6,9 +6,9 @@
             </div>
             <div class="game-card-medium-info">
                 <div class="game-card-info-plataforms">
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
+                    <img src="../assets/images/windows.png" alt="">
+                    <img src="../assets/images/xbox-logo.png" alt="">
+                    <img src="../assets/images/playstation-logotype.png" alt="">
                 </div>
                 <div class="game-card-info-tittle">
                     <h1>The Last of Us Part 2</h1>
@@ -17,8 +17,12 @@
                     <span>R$ 249,99</span>
                 </div>
                 <div class="game-card-actions">
-                    <span>1</span>
-                    <span>2</span>
+                    <button id="btn-favorite">
+                        <img src="../assets/images/heart.png" alt="">
+                    </button>
+                    <button id="btn-cart">
+                        <a href="">Comprar</a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -44,6 +48,7 @@
     .game-card-medium{
         width: 30%;
         background-color: #202020;
+        border-radius: 10px;
     }
 
     .game-card-medium-media{
@@ -72,6 +77,10 @@
       
     }
 
+    .game-card-info-plataforms img{
+        max-width: 14px;
+    }
+
     .game-card-info-tittle h1{
         font-size: 26px;
         font-weight: bold;
@@ -80,16 +89,47 @@
     }
 
     .game-card-info-price span{
-        font-size: 20px;
+        font-size: 21px;
         font-weight: 400;
-        color: #fff;
+        color: #e4e4e4;
         margin-bottom: 10px;
     }
 
     .game-card-actions{
         display: flex;
         justify-content: start;
-        gap:10px;
+        align-items: center;
+        padding: 10px 0px;
+        gap:15px;
         margin-top: 14px;
+    }
+
+    #btn-cart{
+        background: linear-gradient(90deg, #005547 0%, #3f82ff 100%);
+        border: none;
+        padding: 11px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        
+    }
+
+    #btn-favorite{
+        background-color: #313131;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 5px 8px;
+    }
+
+    #btn-favorite img{
+        max-width: 18px;
+    }
+
+    .game-card-actions button a{
+        text-decoration: none;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px ;
+        font-weight: bold;
     }
 </style>

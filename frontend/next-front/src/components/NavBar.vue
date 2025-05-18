@@ -26,6 +26,21 @@
                     </li>
                 </ul>
             </div>
+            <div class="discover-menu">
+                <div class="nickname">
+                    <span>Admin</span>
+                </div>
+                <ul>
+                    <li>
+                        <img src="../assets/images/group.png" alt="">
+                        Usuarios
+                    </li>
+                    <li>
+                        <img src="../assets/images/game-controller.png" alt="">
+                        Jogos
+                    </li>
+                </ul>
+            </div>
         </nav>
     </aside>
 </template>
