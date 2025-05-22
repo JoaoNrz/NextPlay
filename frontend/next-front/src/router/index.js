@@ -3,6 +3,7 @@ import Home from '../views/HomeView.vue'
 import GameDetails from '../views/GameDetails.vue'
 import Login from '../views/LoginView.vue'
 import CheckoutView from '../views/CheckoutView.vue'
+import AdminCreateGame from '../views/AdminCreateGameView.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path:'/checkout',
     name:'Checkout',
     component:CheckoutView
+  },
+  {
+    path: '/admin/jogos/novo',  
+    name: 'AdminCreateGame',
+    component: AdminCreateGame
   }
 ]
 

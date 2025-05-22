@@ -20,6 +20,7 @@
         <div class="checkout-image">
             <img src="../assets/images/tlou2.jpg" alt="Imagem do Jogo" />
             <p>Ao comprar voce aceita nossos termos e diretrizes.</p>
+            <p>Após finalizar a compra, seu novo jogo estará disponível em sua biblioteca. Caso não apareça imediatamente, por favor entre em contato com nosso suporte.</p>
         </div>
     </div>
 
@@ -136,6 +137,17 @@
     }
 
     .checkout-image{
-        padding: 20px;
+        padding: 30px;
+    }
+
+    .checkout-image img{
+        border-radius: 8px;
+    }
+
+    .checkout-image p{
+        font-size:16px;
+        color:rgba(204, 204, 204, 0.812);
+        font-weight: 300;
+        margin-top: 10px;
     }
 </style>
