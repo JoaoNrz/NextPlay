@@ -179,7 +179,7 @@ export default {
 label {
     margin-bottom: 8px;
     font-weight: 500;
-    color: #fff;
+    color: #e0e0e0ce;
     font-size: 17px;
 }
 

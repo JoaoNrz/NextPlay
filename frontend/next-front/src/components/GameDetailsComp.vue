@@ -18,6 +18,10 @@
             <div class="details-core-infos">
                 <h2>About</h2>
                 <p id="descript-game">Play the winner of over 300 Game of the Year awards, now remastered for the PlayStation®5 console. Experience for the first time or relive Ellie and Abby’s story with graphical enhancements, new gameplay modes like the roguelike survival experience No Return, full DualSense™ wireless controller integration, and more.</p>
+                 <div class="metacritic">
+                    <h2>Metacritic</h2>
+                    <p>93</p>
+                </div>
                 <div class="game-meta">
                     <div class="game-meta-block">
                         <div class="game-meta-title">Plataformas</div>
@@ -36,9 +40,19 @@
             </div>
         </div>
         <div class="details-extra">
-            <h1>aaaa
+            <div class="image-details">
+                <img src="../assets/images/tlouComplete.jpg" alt="">
+            </div>
+           
+            <p>
+                Este jogo pode conter conteúdo impróprio para menores de idade. Verifique a classificação indicativa antes de prosseguir.
+            </p>
 
-            </h1>
+        </div>
+    </div>
+    <div class="page__art">
+        <div class="art-wrapper" style="height: 500px;">
+            <div class="art art_colored"></div>
         </div>
     </div>
 
@@ -63,7 +77,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 60%;
+        width: 50%;
         flex-direction: column;
         padding: 20px;
         gap: 20px;
@@ -105,6 +119,7 @@
         align-items: center;
         text-align: start;
         width: 100%;
+        margin-bottom: 10px;
     }
 
     .details-core-title h1{
@@ -172,5 +187,86 @@
     .game-meta-text{
         font-size: 16px;
         line-height: 1.5;
+    }
+
+    .page__art {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -2;
+        width: 100%;
+        height: 100%;
+    }
+
+    .art-wrapper{
+        height: 500px;
+    }
+
+    .art_colored
+    {
+        max-height: 100%;
+        background-size: cover;
+    }
+
+    .art {
+        width: 100%;
+        height: 100%;
+        background: no-repeat top;
+        background-size: cover;
+        -webkit-transition: background .3s;
+        transition: background .3s;
+    }
+
+    .art_colored{
+            height: 500px;
+                    background-color: transparent;
+                    background-image:
+                        linear-gradient(rgba(15, 15, 15, 0), rgb(21, 21, 21)),
+                        linear-gradient(rgba(21, 21, 21, 0.8), rgba(21, 21, 21, 0.5)),
+                        url('https://media.rawg.io/media/resize/1280/-/games/d09/d099b508a1cfb5bd2f2928b50e0784a5.jpg');
+                    z-index: 1
+    }
+
+    .details-extra{
+        width: 40%;
+    }
+
+    .image-details{
+        width: 420px;
+        height: 220px;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .image-details img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .metacritic{
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .metacritic h2{
+        font-size: 17px;
+        font-weight: 400;
+        color: #999999;
+    }
+
+    .metacritic p{
+        font-size: 22px;
+        font-weight: 400;
+        color: #ebebeb;
+    }
+
+    .details-extra p{
+        font-size: 14px;
+        font-weight: 400;
+        color: #999999;
+        margin-top: 20px;
+        max-width: 400px;
+        word-break: break-word;
     }
 </style>

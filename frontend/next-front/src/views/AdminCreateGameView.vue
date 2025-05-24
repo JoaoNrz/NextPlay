@@ -27,7 +27,8 @@ export default {
 
 h1 {
   text-align: center;
-  margin-bottom: 30px;
-  font-family: Arial, sans-serif;
+  margin-bottom: 5px;
+  font-size: 38px;
+  font-weight: 400;
 }
 </style>
