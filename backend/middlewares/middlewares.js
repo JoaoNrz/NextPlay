@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
+import cors from 'cors';
 
 //middleware para carregar os arquivos estaticos/asstes
 const staticMiddleware = express.static(path.join(__dirname,'assets'));
@@ -31,6 +32,10 @@ const rateLimitMiddleware = rateLimit({
     message: 'Muitas requisições, tente novamente em 10 minutos.'
 });
 
+const corsMiddleware = cors({
+    origin: '*', // Permitir todas as origens
+});
+
 
 //middleware para guardar logs da aplicação
 // const logFile = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags:'a'});
@@ -45,5 +50,6 @@ export {
     securityMiddleware,
     compressionMiddlewware,
     rateLimitMiddleware,
+    corsMiddleware,
   
 };

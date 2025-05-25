@@ -58,6 +58,21 @@ class UserController {
         }
     }
 
+    //buscar usuário por id
+    static async getUserById(req, res) {
+        try {
+            const { id } = req.params;
+            const usuario = await User.findById(id);
+            if (!usuario) {
+                return res.status(404).json({ message: 'Usuário não encontrado.' });
+            }
+            res.status(200).json(usuario);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro ao buscar usuário.' });
+        }
+    }
+
     //deleter usuario
     static async deleteUser(req, res) {
         try {

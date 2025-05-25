@@ -74,12 +74,27 @@ class JogosController {
         }
     }
 
+    //buscar jogo por id
+    static async getJogoById(req, res) {
+        try {
+            const { id } = req.params;
+            const jogo = await Jogos.findById(id);
+            if (!jogo) {
+                return res.status(404).json({ message: 'Jogo não encontrado' });
+            }
+            res.status(200).json(jogo);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro ao buscar o jogo' });
+        }
+    }
+
     //atualizar jogo por id
     static async updateJogoById(req, res) {
         try {
             const { id } = req.params;
             const { titulo, descricao, imagemURL, dataLancamento, preco, categorias, desenvolvedores, plataformas, metacritic, avaliacoes } = req.body;
-            const jogo = await Jogos.findByIdAndUpdate(id, { titulo, descricao, imagemURL, dataLancamento, preco, categorias, desenvolvedores, plataformas, metacritic, avaliacoes }, { new: true });
+            const jogo = await Jogos.updateJogo(id, { titulo, descricao, imagemURL, dataLancamento, preco, categorias, desenvolvedores, plataformas, metacritic, avaliacoes }, { new: true });
             if (!jogo) {
                 return res.status(404).json({ message: 'Jogo não encontrado' });
             }
@@ -94,7 +109,7 @@ class JogosController {
     static async deleteJogoById(req, res) {
         try {
             const { id } = req.params;
-            const jogo = await Jogos.findByIdAndDelete(id);
+            const jogo = await Jogos.deleteById(id);
             if (!jogo) {
                 return res.status(404).json({ message: 'Jogo não encontrado' });
             }

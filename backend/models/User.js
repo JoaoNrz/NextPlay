@@ -44,6 +44,11 @@ class User {
         return await UserModel.findOne({nome: nome});
     }
 
+    //buscar por id
+    static async findById(id){
+        return await UserModel.findById(id);
+    }
+
     //DELETE
     static async deleteById(id){
         return await UserModel.findByIdAndDelete(id);

@@ -6,7 +6,8 @@ import {
     staticMiddleware,
     urlencodedMiddleware, jsonMiddleware,
     securityMiddleware, compressionMiddlewware,
-    rateLimitMiddleware
+    rateLimitMiddleware,
+    corsMiddleware
 } from './middlewares/middlewares.js';
 import conectBD from './config/db.js';
 import routerJogos from './routes/jogosRoutes.js';
@@ -29,6 +30,7 @@ app.use(jsonMiddleware);
 //app.use(securityMiddleware);
 app.use(compressionMiddlewware);
 //app.use(rateLimitMiddleware);
+app.use(corsMiddleware);
 
 app.use(routerJogos);
 app.use(routerUser);

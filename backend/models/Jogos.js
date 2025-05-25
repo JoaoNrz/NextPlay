@@ -51,6 +51,11 @@ class Jogos {
         return await JogosModel.find({plataformas: {$in: plataformas}});
     }
 
+    //buscar por id
+    static async findById(id){
+        return await JogosModel.findById(id);
+    }
+
     //notas criticos maiores
 
     //DELETE

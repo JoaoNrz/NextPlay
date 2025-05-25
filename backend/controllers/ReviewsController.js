@@ -89,6 +89,21 @@ class ReviewsController {
             res.status(500).json({ message: 'Erro ao atualizar a avaliação' });
         }
     }
+
+    //buscar avaliação por id
+    static async getReviewById(req, res) {
+        try {
+            const { id } = req.params;
+            const review = await Reviews.findById(id);
+            if (!review) {
+                return res.status(404).json({ message: 'Avaliação não encontrada' });
+            }
+            res.status(200).json(review);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro ao buscar a avaliação' });
+        }
+    }
 }
 
 export default ReviewsController;

@@ -43,6 +43,11 @@ import Jogos from './Jogos.js';
             return await ReviewsModel.find({ jogo: jogo });
         }
 
+        //buscar por id
+        static async findById(id) {
+            return await ReviewsModel.findById(id).populate('usuario').populate('jogo');
+        }
+
         //DELETE
         static async deleteById(id) {
             return ReviewsModel.findByIdAndDelete(id);
