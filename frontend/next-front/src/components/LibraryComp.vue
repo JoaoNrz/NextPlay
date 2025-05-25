@@ -6,19 +6,19 @@
             :key="game.id"
         >
             <div class="game-card-medium-media">
-                <img :src="game.image" :alt="game.title" />
+                <img :src="getImageUrl(game.imagemURL)" :alt="game.titulo || game.title" />
             </div>
             <div class="game-card-medium-info">
                 <div class="game-card-info-plataforms">
                     <img
-                        v-for="platform in game.platforms"
+                        v-for="platform in game.plataformas || game.platforms"
                         :key="platform"
                         :src="getPlatformIcon(platform)"
                         :alt="platform"
                     />
                 </div>
                 <div class="game-card-info-tittle">
-                    <h1>{{ game.title }}</h1>
+                    <h1>{{ game.titulo || game.title }}</h1>
                 </div>
                 <div class="game-card-info-price">
                     <span>Adquirido</span>
@@ -34,24 +34,27 @@
 </template>
 
 <script>
+import axiosInstance from '../services/axiosInstance.js';
+
 export default {
     name: 'LibraryComp',
     data() {
         return {
-            libraryGames: [
-                {
-                    id: 1,
-                    title: 'The Last of Us Part 2',
-                    image: require('../assets/images/tlou2.jpg'),
-                    platforms: ['windows', 'xbox', 'playstation'],
-                },
-                // Adicione mais jogos conforme necessário
-            ],
+            libraryGames: []
         };
+    },
+    async mounted() {
+        const userId = localStorage.getItem('userId');
+        try {
+            const response = await axiosInstance.get(`/user/${userId}/biblioteca`);
+            this.libraryGames = response.data;
+        } catch (error) {
+            alert('Erro ao buscar biblioteca');
+        }
     },
     methods: {
         getPlatformIcon(platform) {
-            switch (platform) {
+            switch (platform.toLowerCase()) {
                 case 'windows':
                     return require('../assets/images/windows.png');
                 case 'xbox':
@@ -62,12 +65,16 @@ export default {
                     return '';
             }
         },
-        playGame(game) {
-            // Lógica para iniciar o jogo
-            alert(`Iniciando ${game.title}...`);
+        getImageUrl(imagemURL) {
+            if (!imagemURL) return '';
+            if (imagemURL.startsWith('http')) return imagemURL;
+            return `http://localhost:3000${imagemURL.startsWith('/') ? '' : '/'}${imagemURL}`;
         },
-    },
-};
+        playGame(game) {
+            alert(`Iniciando ${game.titulo || game.title}...`);
+        }
+    }
+}
 </script>
 
 <style scoped>

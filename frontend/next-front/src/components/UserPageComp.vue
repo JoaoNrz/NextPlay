@@ -1,12 +1,12 @@
 <template>
     <div class="userpage-container">
         <div class="inicial-infos-user">
-            <h1>NickName</h1>
-            <div class="user-icon">J</div>
+            <h1>{{ user ? user.nome : 'NickName' }}</h1>
+            <div class="user-icon">{{ user ? user.nome[0].toUpperCase() : 'J' }}</div>
         </div>
         <div class="links-user">
             <ul>
-                <li><a href="#">Biblioteca</a></li>
+                <li><a href="/library">Biblioteca</a></li>
                 <li><a href="/wishlist">WishList</a></li>
                 <li><a href="/avaliacoes">Avaliações</a></li>
             </ul>
@@ -18,13 +18,13 @@
         </div>
         <div class="infos-user">
             <h2>Nome</h2>
-            <p>Name</p>
+            <p>{{ user ? user.nome : '' }}</p>
             <h2>Email:</h2>
-            <p>Email</p>
+            <p>{{ user ? user.email : '' }}</p>
             <h2>Senha:</h2>
-            <p>Senha</p>
+            <p>********</p>
             <h2>Data de cadastro:</h2>
-            <p>Data Cadastro</p>
+            <p>{{ user ? (new Date(user.dataCadastro).toLocaleDateString('pt-BR')) : '' }}</p>
             <div class="actions-user">
                 <button>
                     <img src="../assets/images/delete.png" alt="">
@@ -43,8 +43,25 @@
 </template>
 
 <script>
+import axiosInstance from '../services/axiosInstance.js';
+
 export default {
     name: 'UserPageComp',
+    data() {
+        return {
+            user: null
+        }
+    },
+    async mounted() {
+        const userId = this.$route.params.id;
+        if (!userId) return;
+        try {
+            const response = await axiosInstance.get(`/user/${userId}`);
+            this.user = response.data;
+        } catch (error) {
+            alert('Erro ao buscar dados do usuário');
+        }
+    }
 }
 </script>
 

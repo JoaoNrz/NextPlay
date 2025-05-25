@@ -1,8 +1,8 @@
 <template>
     <div class="listgames">
-        <div class="game-card-medium">
+        <div class="game-card-medium" v-for="jogo in wishlist" :key="jogo._id">
             <div class="game-card-medium-media">
-                <img src="../assets/images/tlou2.jpg" alt="Game 1">
+                <img :src="getImageUrl(jogo.imagemURL)" :alt="jogo.titulo">
             </div>
             <div class="game-card-medium-info">
                 <div class="game-card-info-plataforms">
@@ -11,14 +11,19 @@
                     <img src="../assets/images/playstation-logotype.png" alt="">
                 </div>
                 <div class="game-card-info-tittle">
-                    <h1>The Last of Us Part 2</h1>
+                    <router-link
+                        :to="{ name: 'Details', params: { id: jogo._id } }"
+                        class="game-title-link"
+                    >
+                        {{ jogo.titulo }}
+                    </router-link>
                 </div>
                 <div class="game-card-info-price">
-                    <span>R$ 249,99</span>
+                    <span>R$ {{ jogo.preco.toFixed(2).replace('.', ',') }}</span>
                 </div>
                 <div class="game-card-actions">
-                    <button id="btn-cart">
-                        <a href="">Comprar</a>
+                    <button id="btn-cart" @click="irParaCheckout(jogo._id)">
+                        Comprar
                     </button>
                 </div>
             </div>
@@ -27,9 +32,35 @@
 </template>
 
 <script>
-    export default {
-        name: 'WishlistComp',
+import axiosInstance from '../services/axiosInstance.js';
+
+export default {
+    name: 'WishlistComp',
+    data() {
+        return {
+            wishlist: []
+        }
+    },
+    async mounted() {
+        const userId = localStorage.getItem('userId');
+        try {
+            const response = await axiosInstance.get(`/user/${userId}/wishlist`);
+            this.wishlist = response.data;
+        } catch (error) {
+            alert('Erro ao buscar wishlist');
+        }
+    },
+    methods: {
+        getImageUrl(path) {
+            if (!path) return '';
+            if (path.startsWith('http')) return path;
+            return `http://localhost:3000${path}`;
+        },
+        irParaCheckout(id) {
+            this.$router.push({ name: 'Checkout', params: { id } });
+        }
     }
+}
 </script>
 
 <style scoped>
@@ -83,31 +114,11 @@
         font-weight: bold;
         color: #fff;
         margin-bottom: 10px;
+        cursor: pointer;
     }
 
     .game-card-info-price span{
         font-size: 21px;
-        font-weight: 400;
-        color: #e4e4e4;
-        margin-bottom: 10px;
-    }
-
-    .game-card-actions{
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        padding: 10px 0px;
-        gap:15px;
-        margin-top: 14px;
-    }
-
-    #btn-cart{
-        background: linear-gradient(90deg, #005547 0%, #3f82ff 100%);
-        border: none;
-        padding: 11px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        
     }
 
     #btn-favorite{
@@ -122,11 +133,52 @@
         max-width: 18px;
     }
 
+    .game-card-actions {
+        display: flex;
+        justify-content: start;
+        gap: 15px;
+        margin-top: 14px;
+    }
+
     .game-card-actions button a{
         text-decoration: none;
         color: #fff;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         font-size: 16px ;
         font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .game-title-link {
+        color: #fff;
+        text-decoration: none;
+        font-size: 26px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        cursor: pointer;
+        display: inline-block;
+        transition: text-decoration 0.2s;
+    }
+    .game-title-link:hover {
+        text-decoration: underline;
+    }
+
+    #btn-cart {
+        background: linear-gradient(90deg, #005547 0%, #3f82ff 100%);
+        border: none;
+        padding: 11px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background 0.2s;
+        margin-left: 0;
+    }
+    #btn-cart:hover {
+        filter: brightness(1.1);
     }
 </style>

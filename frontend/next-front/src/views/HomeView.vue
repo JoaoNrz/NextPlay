@@ -64,7 +64,7 @@
     .extramsg{
       width: 100%;
       height: 80px;
-      background: linear-gradient(90deg, #ff39a6 0%, #ff8c3f 100%);
+      background: linear-gradient(180deg, #fd867d, #b1305c);
       border-radius: 10px;
       display: flex;
       align-items: center;

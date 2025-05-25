@@ -1,7 +1,7 @@
 <template>
     <div class="container-login">
         <h1>Log In</h1>
-        <form>
+        <form @submit.prevent="login">
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" v-model="email" required />
@@ -15,9 +15,37 @@
     </div>
 </template>
 
-<script>    
+<script>
+import axiosInstance from '../services/axiosInstance.js';
+
+
     export default{
         name:'LoginComp',
+        data() {
+            return {
+                email: '',
+                password: ''
+            }
+        },
+        methods: {
+            async login() {
+                try {
+                    const response = await axiosInstance.post('/user/login', {
+                        email: this.email,
+                        senha: this.password
+                    });
+                    // Supondo que o backend retorna { token, nome }
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('userName', response.data.usuario.nome); // <-- Aqui salva o nome
+                    localStorage.setItem('userId', response.data.usuario._id); // <-- Aqui salva o userId do MongoDB
+                    localStorage.setItem('isAdmin', response.data.usuario.isAdmin); // <-- Aqui salva o isAdmin do MongoDB
+                    this.$router.push({ name: 'Home' });
+                } catch (error) {
+                    // Trate o erro de login
+                    console.error("Erro ao fazer login:", error);
+                }
+            }
+        }
     }
 
 </script>

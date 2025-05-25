@@ -3,9 +3,9 @@
         <div class="checkout-info">
             <h2 class="checkout-title">Finalizar Compra</h2>
             <div class="game-details">
-                <h3 class="game-title">The Last of Us Part II</h3>
-                <p class="game-desc">Play the winner of over 300 Game of the Year awards, now remastered for the PlayStation®5 console. Experience for the first time or relive Ellie and Abby’s story with graphical enhancements, new gameplay modes like the roguelike survival experience No Return, full DualSense™ wireless controller integration, and more.</p>
-                <p class="game-price">Preço a ser pago: <span>R$ 199,90</span></p>
+                <h3 class="game-title">{{ jogo ? jogo.titulo : '' }}</h3>
+                <p class="game-desc">{{ jogo ? jogo.descricao : '' }}</p>
+                <p class="game-price">Preço a ser pago: <span>R$ {{ jogo ? (typeof jogo.preco === 'number' ? jogo.preco.toFixed(2) : '0.00') : '' }}</span></p>
             </div>
             <div class="payment-method">
                 <label for="payment-select">Método de Pagamento:</label>
@@ -15,10 +15,10 @@
                     <option value="boleto">Boleto Bancário</option>
                 </select>
             </div>
-            <button class="checkout-btn">Finalizar Compra</button>
+            <button class="checkout-btn" @click="finalizarCompra">Finalizar Compra</button>
         </div>
         <div class="checkout-image">
-            <img src="../assets/images/tlou2.jpg" alt="Imagem do Jogo" />
+            <img v-if="jogo && jogo.imagemURL" :src="getImageUrl(jogo.imagemURL)" alt="Imagem do Jogo" />
             <p>Ao comprar voce aceita nossos termos e diretrizes.</p>
             <p>Após finalizar a compra, seu novo jogo estará disponível em sua biblioteca. Caso não apareça imediatamente, por favor entre em contato com nosso suporte.</p>
         </div>
@@ -27,9 +27,48 @@
 </template>
 
 <script>
-    export default{
-        name:'CheckoutComp',
+import axiosInstance from '../services/axiosInstance.js';
+
+export default {
+  name: 'CheckoutComp',
+  data() {
+    return {
+      jogo: null
     }
+  },
+  async mounted() {
+    const id = this.$route.params.id;
+    if (id) {
+      try {
+        const response = await axiosInstance.get(`/jogos/${id}`);
+        this.jogo = response.data;
+      } catch (error) {
+        console.error('Erro ao buscar jogo para checkout:', error);
+      }
+    }
+  },
+  methods: {
+    getImageUrl(imagemURL) {
+      if (!imagemURL) return '';
+      if (imagemURL.startsWith('http')) return imagemURL;
+      return `http://localhost:3000${imagemURL.startsWith('/') ? '' : '/'}${imagemURL}`;
+    },
+    async finalizarCompra() {
+      const userId = localStorage.getItem('userId');
+      if (!userId || !this.jogo || !this.jogo._id) {
+        alert('Usuário ou jogo não encontrado!');
+        return;
+      }
+      try {
+        await axiosInstance.put(`/user/${userId}/biblioteca/${this.jogo._id}`);
+        alert('Compra realizada! Jogo adicionado à sua biblioteca.');
+        this.$router.push({ name: 'Library' }); // Ajuste o nome da rota conforme seu router
+      } catch (error) {
+        alert('Erro ao finalizar compra.');
+      }
+    }
+  }
+}
 </script>
 
 <style>

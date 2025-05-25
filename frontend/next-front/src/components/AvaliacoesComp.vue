@@ -4,26 +4,21 @@
             <button @click="showModal = true">Adicionar Avaliação</button>
         </div>
         <div class="avalia-content">
-            <div class="card-avalia">
+            <div v-if="avaliacoes.length === 0" class="no-avaliacoes">
+                Nenhuma avaliação encontrada.
+            </div>
+            <div class="card-avalia" v-for="avalia in avaliacoes" :key="avalia._id">
                 <div class="title-game-avalia">
                     <h1>Jogo:</h1>
-                    <p>The Last of Us Part II</p>
+                    <p>{{ avalia.jogo.titulo }}</p>
                 </div>
                 <div class="coment-game-avalia">
                     <h1>Comentário:</h1>
-                    <p id="avalia-text">
-                    The Last of Us Part II é uma experiência incrível do início ao fim. A narrativa é envolvente e cheia de reviravoltas emocionantes, mantendo o jogador preso à história. Os gráficos são impressionantes, com cenários detalhados e personagens muito bem construídos. A trilha sonora complementa perfeitamente a atmosfera do jogo, tornando cada momento ainda mais impactante. Sem dúvida, é um dos melhores jogos já lançados para PlayStation.
-                </p>
+                    <p id="avalia-text">{{ avalia.comentario }}</p>
                 </div>
-                
                 <div class="avalia">
                     <h1>Avaliação:</h1>
-                    <span>5</span>
-                </div>
-
-                <div class="actions">
-                    <button id="edit-avalia"><img src="../assets/images/delete.png" alt=""></button>
-                    <button id="exlude-avalia"><img src="../assets/images/editing.png" alt=""></button>
+                    <span>{{ avalia.nota }}</span>
                 </div>
             </div>
         </div>
@@ -62,9 +57,11 @@
 </template>
 
 <script>
-    export default {
-        name: 'AvaliacoesComp',
-        data() {
+import axiosInstance from '../services/axiosInstance.js';
+
+export default {
+    name: 'AvaliacoesComp',
+    data() {
         return {
             showModal: false,
             form: {
@@ -78,7 +75,17 @@
                 'Horizon Zero Dawn',
                 'Spider-Man',
                 'Uncharted 4'
-            ]
+            ],
+            avaliacoes: []
+        }
+    },
+    async mounted() {
+        const userId = localStorage.getItem('userId');
+        try {
+            const response = await axiosInstance.get(`/user/${userId}/avaliacoes`);
+            this.avaliacoes = response.data;
+        } catch (error) {
+            alert('Erro ao buscar avaliações');
         }
     },
     methods: {
@@ -91,7 +98,7 @@
             this.closeModal();
         }
     }
-    }
+}
 </script>
 
 <style>
@@ -271,5 +278,13 @@
 .modal-actions button[type="button"] {
     background: #444;
     border: none;
+}
+
+.no-avaliacoes {
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+    margin: 40px 0;
 }
 </style>

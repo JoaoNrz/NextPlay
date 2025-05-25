@@ -1,12 +1,17 @@
 <template>
     <div class="games-container">
         <div class="new-game-container">
-            <button @click="showModal = true">Adicionar Jogo</button>
+            <button @click="openAddModal">Adicionar Jogo</button>
         </div>
         <div class="games-content">
             <div class="card-game" v-for="game in games" :key="game.titulo">
                 <div class="card-header">
-                    <img v-if="game.imagemURL" :src="game.imagemURL" alt="Capa do jogo" class="game-img"/>
+                    <img
+  v-if="game.imagemURL"
+  :src="getImageUrl(game.imagemURL)"
+  alt="Capa do jogo"
+  class="game-img"
+/>
                     <div class="main-info">
                         <h2>{{ game.titulo }}</h2>
                         <div class="info-row">
@@ -49,49 +54,50 @@
             <div class="modal-content">
                 <h2>Adicionar Jogo</h2>
                 <form @submit.prevent="cadastrarjogo">
-                    <div class="form-columns">
-                        <div class="form-group">
-                            <label for="titulo">Título:</label>
-                            <input id="titulo" v-model="jogo.titulo" required type="text" placeholder="Título do jogo" />
-                        </div>
-                        <div class="form-group">
-                            <label for="descricao">Descrição:</label>
-                            <input id="descricao" v-model="jogo.descricao" type="text" placeholder="Descrição do jogo" />
-                        </div>
-                        <div class="form-group">
-                            <label for="imagemURL">URL da Imagem:</label>
-                            <input id="imagemURL" v-model="jogo.imagemURL" type="text" placeholder="URL da imagem" />
-                        </div>
-                        <div class="form-group">
-                            <label for="dataLancamento">Data de Lançamento:</label>
-                            <input id="dataLancamento" v-model="jogo.dataLancamento" type="date" />
-                        </div>
-                        <div class="form-group">
-                            <label for="preco">Preço:</label>
-                            <input id="preco" v-model.number="jogo.preco" required type="number" min="0" step="0.01" placeholder="Preço" />
-                        </div>
-                        <div class="form-group">
-                            <label for="categorias">Categorias (separadas por vírgula):</label>
-                            <input id="categorias" v-model="jogo.categorias" type="text" placeholder="Ação, Aventura, ..." />
-                        </div>
-                        <div class="form-group">
-                            <label for="desenvolvedores">Desenvolvedores (separados por vírgula):</label>
-                            <input id="desenvolvedores" v-model="jogo.desenvolvedores" type="text" placeholder="Dev1, Dev2, ..." />
-                        </div>
-                        <div class="form-group">
-                            <label for="plataformas">Plataformas (separadas por vírgula):</label>
-                            <input id="plataformas" v-model="jogo.plataformas" type="text" placeholder="PC, PS5, ..." />
-                        </div>
-                        <div class="form-group">
-                            <label for="metacritic">Metacritic:</label>
-                            <input id="metacritic" v-model.number="jogo.metacritic" type="number" min="0" max="100" placeholder="Nota Metacritic" />
-                        </div>
-                    </div>
-                    <div class="modal-actions">
-                        <button type="submit">Salvar</button>
-                        <button type="button" @click="closeModal">Cancelar</button>
-                    </div>
-                </form>
+    <div class="form-columns">
+        <div class="form-group">
+            <label for="titulo">Título:</label>
+            <input id="titulo" v-model="jogo.titulo" required type="text" placeholder="Título do jogo" />
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição:</label>
+            <input id="descricao" v-model="jogo.descricao" type="text" placeholder="Descrição do jogo" />
+        </div>
+        <!-- Removido o campo de URL da Imagem -->
+        <div class="form-group">
+            <label for="dataLancamento">Data de Lançamento:</label>
+            <input id="dataLancamento" v-model="jogo.dataLancamento" type="date" />
+        </div>
+        <div class="form-group">
+            <label for="preco">Preço:</label>
+            <input id="preco" v-model.number="jogo.preco" required type="number" min="0" step="0.01" placeholder="Preço" />
+        </div>
+        <div class="form-group">
+            <label for="categorias">Categorias (separadas por vírgula):</label>
+            <input id="categorias" v-model="jogo.categorias" type="text" placeholder="Ação, Aventura, ..." />
+        </div>
+        <div class="form-group">
+            <label for="desenvolvedores">Desenvolvedores (separados por vírgula):</label>
+            <input id="desenvolvedores" v-model="jogo.desenvolvedores" type="text" placeholder="Dev1, Dev2, ..." />
+        </div>
+        <div class="form-group">
+            <label for="plataformas">Plataformas (separadas por vírgula):</label>
+            <input id="plataformas" v-model="jogo.plataformas" type="text" placeholder="PC, PS5, ..." />
+        </div>
+        <div class="form-group">
+            <label for="metacritic">Metacritic:</label>
+            <input id="metacritic" v-model.number="jogo.metacritic" type="number" min="0" max="100" placeholder="Nota Metacritic" />
+        </div>
+        <div class="form-group">
+            <label for="imagem">Imagem do Jogo:</label>
+            <input id="imagem" type="file" @change="onFileChange" accept="image/*" />
+        </div>
+    </div>
+    <div class="modal-actions">
+        <button type="submit">Salvar</button>
+        <button type="button" @click="closeModal">Cancelar</button>
+    </div>
+</form>
             </div>
         </div>
     </div>
@@ -124,7 +130,8 @@ export default {
                 metacritic: 0
             },
             editMode: false,
-            editId: null
+            editId: null,
+            imagemFile: null,
         }
     },
     methods: {
@@ -142,25 +149,56 @@ export default {
                 metacritic: 0
             };
         },
+        openAddModal() {
+            this.editMode = false;
+            this.editId = null;
+            this.imagemFile = null;
+            this.jogo = {
+                titulo: '',
+                descricao: '',
+                imagemURL: '',
+                dataLancamento: '',
+                preco: 0,
+                categorias: [],
+                desenvolvedores: [],
+                plataformas: [],
+                metacritic: 0
+            };
+            this.showModal = true;
+        },
         async cadastrarjogo() {
             try {
-                const novoJogo = {
-                    ...this.jogo,
-                    categorias: typeof this.jogo.categorias === 'string'
-                        ? this.jogo.categorias.split(',').map(s => s.trim()).filter(Boolean)
-                        : this.jogo.categorias,
-                    desenvolvedores: typeof this.jogo.desenvolvedores === 'string'
-                        ? this.jogo.desenvolvedores.split(',').map(s => s.trim()).filter(Boolean)
-                        : this.jogo.desenvolvedores,
-                    plataformas: typeof this.jogo.plataformas === 'string'
-                        ? this.jogo.plataformas.split(',').map(s => s.trim()).filter(Boolean)
-                        : this.jogo.plataformas,
-                };
+                const formData = new FormData();
+                formData.append('titulo', this.jogo.titulo);
+                formData.append('descricao', this.jogo.descricao);
+                formData.append('dataLancamento', this.jogo.dataLancamento);
+                formData.append('preco', this.jogo.preco);
+                formData.append('metacritic', this.jogo.metacritic);
+
+                // Arrays como string separada por vírgula
+                formData.append('categorias', typeof this.jogo.categorias === 'string'
+                    ? this.jogo.categorias
+                    : this.jogo.categorias.join(','));
+                formData.append('desenvolvedores', typeof this.jogo.desenvolvedores === 'string'
+                    ? this.jogo.desenvolvedores
+                    : this.jogo.desenvolvedores.join(','));
+                formData.append('plataformas', typeof this.jogo.plataformas === 'string'
+                    ? this.jogo.plataformas
+                    : this.jogo.plataformas.join(','));
+
+                // Adicione a imagem se houver
+                if (this.imagemFile) {
+                    formData.append('imagem', this.imagemFile);
+                }
 
                 if (this.editMode && this.editId) {
-                    await axiosInstance.put(`/jogos/${this.editId}`, novoJogo);
+                    await axiosInstance.put(`/jogos/${this.editId}`, formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    });
                 } else {
-                    await axiosInstance.post('/jogos', novoJogo);
+                    await axiosInstance.post('/jogos', formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    });
                 }
 
                 // Limpa o form
@@ -175,12 +213,12 @@ export default {
                     plataformas: [],
                     metacritic: 0
                 };
+                this.imagemFile = null;
                 this.showModal = false;
                 this.editMode = false;
                 this.editId = null;
                 this.$emit('jogo-cadastrado');
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Erro ao salvar o jogo:', error);
             }
         },
@@ -212,6 +250,17 @@ export default {
                 metacritic: game.metacritic
             };
             this.showModal = true;
+        },
+        onFileChange(event) {
+            const file = event.target.files[0];
+            this.imagemFile = file;
+        },
+        getImageUrl(path) {
+            if (!path) return '';
+            // Se já for uma URL completa, retorna direto
+            if (path.startsWith('http')) return path;
+            // Monta a URL correta do backend
+            return `http://localhost:3000${path}`;
         },
     }
 }

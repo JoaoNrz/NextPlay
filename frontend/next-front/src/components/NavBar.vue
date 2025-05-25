@@ -9,10 +9,10 @@
             </div>
             <div class="discover-menu">
                 <div class="nickname">
-                    <span>NickName</span>
+                    <span>{{ userName }}</span>
                     <!-- Ícone do usuário -->
                     <div class="user-icon">
-                        J
+                        {{ userInitial }}
                     </div>
                 </div>
                 <ul>
@@ -20,20 +20,19 @@
                         <a href="/wishlist"><img src="../assets/images/heart.png" alt="">Wishlist</a>
                     </li>
                     <li>
-                        <img src="../assets/images/library.png" alt="">
-                        Biblioteca
+                        <a href="/library"><img src="../assets/images/library.png" alt="">Biblioteca</a>
+                        
+                        
                     </li>
                 </ul>
             </div>
-            <div class="discover-menu">
+            <div class="discover-menu" v-if="isAdmin">
                 <div class="nickname">
                     <span>Admin</span>
                 </div>
                 <ul>
                     <li>
                         <a href="/all-users"><img src="../assets/images/group.png" alt="">Usuarios</a>
-                        
-                        
                     </li>
                     <li>
                         <a href="/all-games"><img src="../assets/images/game-controller.png" alt="">Jogos</a>
@@ -45,15 +44,24 @@
 </template>
 
 <script>
-    export default {
-        name: 'NavBar',
-        props: {
-            userInitial: {
-                type: String,
-                default: 'J'
-            }
+export default {
+    name: 'NavBar',
+    computed: {
+        userName() {
+            return localStorage.getItem('userName') || 'NickName';
+        },
+        userInitial() {
+            const name = localStorage.getItem('userName') || '';
+            return name ? name[0].toUpperCase() : 'J';
+        },
+        isAdmin() {
+            // Se usar booleano:
+            return localStorage.getItem('isAdmin') === 'true';
+            // Se usar idAdmin:
+            // return localStorage.getItem('idAdmin') === 'true' || localStorage.getItem('idAdmin') === '1';
         }
     }
+}
 </script>
 
 <style scoped>

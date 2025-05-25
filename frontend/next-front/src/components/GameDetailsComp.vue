@@ -1,67 +1,118 @@
 <template>
-    <div class="container-details">
+    <div class="container-details" v-if="jogo">
         <div class="details-core">
             <div class="details-core-init">
-                <span class="data">14/04/2002</span>
+                <span class="data">{{ formatDate(jogo.dataLancamento) }}</span>
                 <div class="details-core-imgs">
-                    <img src="../assets/images/playstation-logotype.png" alt="">
-                    <img src="../assets/images/windows.png" alt="">
+                    <img v-if="jogo.plataformas && jogo.plataformas.includes('PlayStation')" src="../assets/images/playstation-logotype.png" alt="">
+                    <img v-if="jogo.plataformas && jogo.plataformas.includes('PC')" src="../assets/images/windows.png" alt="">
+                    <img v-if="jogo.plataformas && jogo.plataformas.includes('Xbox')" src="../assets/images/xbox-logo.png" alt="">
                 </div>
             </div>
             <div class="details-core-title">
-                <h1>The Last of Us Part II</h1>
+                <h1>{{ jogo.titulo }}</h1>
             </div>
             <div class="details-core-actions">
                 <button>Adicionar a lista de desejos</button>
-                <button>Comprar</button>
+                <button @click="irParaCheckout">Comprar</button>
             </div>
             <div class="details-core-infos">
-                <h2>About</h2>
-                <p id="descript-game">Play the winner of over 300 Game of the Year awards, now remastered for the PlayStation®5 console. Experience for the first time or relive Ellie and Abby’s story with graphical enhancements, new gameplay modes like the roguelike survival experience No Return, full DualSense™ wireless controller integration, and more.</p>
-                 <div class="metacritic">
+                <h2>Sobre</h2>
+                <p id="descript-game">{{ jogo.descricao }}</p>
+                <div class="metacritic">
                     <h2>Metacritic</h2>
-                    <p>93</p>
+                    <p>{{ jogo.metacritic }}</p>
                 </div>
                 <div class="game-meta">
                     <div class="game-meta-block">
                         <div class="game-meta-title">Plataformas</div>
-                        <div class="game-meta-text">PC,PlayStation®5</div>
+                        <div class="game-meta-text">{{ (jogo.plataformas || []).join(', ') }}</div>
                     </div>
                     <div class="game-meta-block">
-                        <div class="game-meta-title">Generos</div>
-                        <div class="game-meta-text">Action, Adventure</div>
+                        <div class="game-meta-title">Categorias</div>
+                        <div class="game-meta-text">{{ (jogo.categorias || []).join(', ') }}</div>
                     </div>
                     <div class="game-meta-block">
                         <div class="game-meta-title">Desenvolvedores</div>
-                        <div class="game-meta-text">Naughty Dog,Iron Galaxy Studios,Nixxes software</div>
+                        <div class="game-meta-text">{{ (jogo.desenvolvedores || []).join(', ') }}</div>
+                    </div>
+                    <div class="game-meta-block">
+                        <div class="game-meta-title">Preço</div>
+                        <div class="game-meta-text">R$ {{ typeof jogo.preco === 'number' ? jogo.preco.toFixed(2) : '0.00' }}</div>
                     </div>
                 </div>
-                
             </div>
         </div>
         <div class="details-extra">
             <div class="image-details">
-                <img src="../assets/images/tlouComplete.jpg" alt="">
+                <img v-if="jogo.imagemURL" :src="getImageUrl(jogo.imagemURL)" :alt="jogo.titulo">
             </div>
-           
             <p>
                 Este jogo pode conter conteúdo impróprio para menores de idade. Verifique a classificação indicativa antes de prosseguir.
             </p>
-
         </div>
+    </div>
+    <div v-else>
+        Carregando detalhes do jogo...
     </div>
     <div class="page__art">
         <div class="art-wrapper" style="height: 500px;">
-            <div class="art art_colored"></div>
+            <div
+  class="art art_colored"
+  :style="artBackgroundStyle"
+></div>
         </div>
     </div>
-
 </template>
 
 <script>
-    export default{
-        name: 'GameDetailsComp',
+import axiosInstance from '../services/axiosInstance.js';
+
+export default {
+  name: 'GameDetails',
+  data() {
+    return {
+      jogo: null
     }
+  },
+  async mounted() {
+    const id = this.$route.params.id;
+    try {
+      const response = await axiosInstance.get(`/jogos/${id}`);
+      this.jogo = response.data;
+    } catch (error) {
+      console.error('Erro ao buscar detalhes do jogo:', error);
+    }
+  },
+  computed: {
+    artBackgroundStyle() {
+      if (!this.jogo || !this.jogo.imagemURL) return {};
+      const url = this.getImageUrl(this.jogo.imagemURL);
+      return {
+        backgroundImage: `
+          linear-gradient(rgba(15, 15, 15, 0), rgb(21, 21, 21)),
+          linear-gradient(rgba(21, 21, 21, 0.8), rgba(21, 21, 21, 0.5)),
+          url('${url}')
+        `
+      };
+    }
+  },
+  methods: {
+    getImageUrl(path) {
+      if (!path) return '';
+      if (path.startsWith('http')) return path;
+      return `http://localhost:3000${path}`;
+    },
+    formatDate(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('pt-BR');
+    },
+    irParaCheckout() {
+      this.$router.push({ name: 'Checkout', params: { id: this.jogo._id } });
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -204,8 +255,10 @@
 
     .art_colored
     {
-        max-height: 100%;
-        background-size: cover;
+        height: 500px;
+        background-color: transparent;
+        /* Não coloque background-image aqui */
+        z-index: 1;
     }
 
     .art {

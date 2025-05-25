@@ -18,7 +18,7 @@ const routes = [
     component: Home
   },
   {
-    path:'/details',
+    path:'/details/:id',
     name:'Details',
     component: GameDetails
   },
@@ -28,9 +28,9 @@ const routes = [
     component:Login
   },
   {
-    path:'/checkout',
-    name:'Checkout',
-    component:CheckoutView
+    path: '/checkout/:id',
+    name: 'Checkout',
+    component: CheckoutView
   },
   {
     path: '/admin/jogos/novo',  
@@ -73,5 +73,16 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('token');
+  if (to.name !== 'Login' && !isAuthenticated) {
+    next({ name: 'Login' });
+  } else if (to.name === 'Login' && isAuthenticated) {
+    next({ name: 'Home' });
+  } else {
+    next();
+  }
+});
 
 export default router
