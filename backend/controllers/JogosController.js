@@ -6,13 +6,28 @@ class JogosController {
 
     //criar um novo jogo
     static async createJogo(req, res) {
-        try{
-            const { titulo, descricao, imagemURL, dataLancamento, preco, categorias, desenvolvedores, plataformas, metacritic, avaliacoes } = req.body;
-            const novoJogo = new Jogos(titulo, descricao, imagemURL, dataLancamento, preco, categorias, desenvolvedores, plataformas, metacritic, avaliacoes);
+        try {
+            // Se o upload de imagem foi feito, pega o caminho do arquivo
+            const imagemURL = req.file ? `/uploads/${req.file.filename}` : null;
+
+            // Os outros campos continuam vindo do body normalmente
+            const { titulo, descricao, dataLancamento, preco, categorias, desenvolvedores, plataformas, metacritic, avaliacoes } = req.body;
+
+            const novoJogo = new Jogos(
+                titulo,
+                descricao,
+                imagemURL,
+                dataLancamento,
+                preco,
+                categorias,
+                desenvolvedores,
+                plataformas,
+                metacritic,
+                avaliacoes
+            );
             await novoJogo.save();
-            res.status(201).json({ message: 'Jogo criado com sucesso!',jogo: novoJogo });
-        }
-        catch (error) {
+            res.status(201).json({ message: 'Jogo criado com sucesso!', jogo: novoJogo });
+        } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Erro ao criar o jogo' });
         }

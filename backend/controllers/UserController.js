@@ -1,6 +1,9 @@
 import path from 'path';
 import __dirname from '../utils/pathUtils.js';
 import User from '../models/User.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import ReviewsModel from '../models/ReviewsSchema.js'; // ajuste o caminho se necessário
 
 class UserController {
 
@@ -106,7 +109,6 @@ class UserController {
 
     //ADD WISHLIST
     static async addToWishlist(req, res) {
-        console.log("Rota PUT /user/:id/wishlist/:jogoId foi acessada");
 
         try {
             const { id, jogoId } = req.params; // Obtendo userId e jogoId da URL
@@ -125,6 +127,17 @@ class UserController {
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Erro ao adicionar jogo à wishlist.' });
+        }
+    }
+
+    static async getWishlist(req, res) {
+        try {
+            const { id } = req.params;
+            const user = await User.findByIdWithWishlist(id);
+            if (!user) return res.status(404).json({ message: 'Usuário não encontrado.' });
+            res.json(user.wishlist);
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar wishlist.' });
         }
     }
 
@@ -167,6 +180,53 @@ class UserController {
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Erro ao adicionar jogo à biblioteca.' });
+        }
+    }
+
+    // LOGIN
+    static async login(req, res) {
+        try {
+            const { email, senha } = req.body;
+            const usuario = await User.findByEmail(email);
+            if (!usuario) {
+                return res.status(401).json({ message: 'Usuário não encontrado.' });
+            }
+            // console.log(usuario.senha,senha);
+            const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+            if (!senhaCorreta) {
+                return res.status(401).json({ message: 'Senha incorreta.' });
+            }
+            // Gera o token
+            const token = jwt.sign(
+                { userId: usuario._id, email: usuario.email },
+                'minhaStringSecretaJWT123', // string secreta básica
+                { expiresIn: '1d' }
+            );
+            res.status(200).json({ token, usuario });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro ao fazer login.' });
+        }
+    }
+
+    static async getBiblioteca(req, res) {
+        try {
+            const { id } = req.params;
+            const user = await User.findByIdWithBiblioteca(id);
+            if (!user) return res.status(404).json({ message: 'Usuário não encontrado.' });
+            res.json(user.biblioteca);
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar biblioteca.' });
+        }
+    }
+
+    static async getAvaliacoes(req, res) {
+        try {
+            const { id } = req.params;
+            const avaliacoes = await ReviewsModel.find({ usuario: id }).populate('jogo');
+            res.json(avaliacoes);
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar avaliações.' });
         }
     }
 }

@@ -36,6 +36,9 @@ app.use(routerJogos);
 app.use(routerUser);
 app.use(routerReviews);
 
+// Serve as imagens publicamente
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.listen(port,()=>{
     console.log(`Servidor rodando na porta ${port}`);
 })

@@ -13,8 +13,15 @@ routerUser.put("/user/:id", UserController.updateUser);
 
 routerUser.put("/user/:id/wishlist/:jogoId", UserController.addToWishlist);
 
+routerUser.get('/user/:id/wishlist', UserController.getWishlist);
+
 routerUser.put("/user/remove/:id/wishlist/:jogoId", UserController.removeFromWishlist);
 routerUser.put("/user/:id/biblioteca/:jogoId", UserController.addToBiblioteca);
+routerUser.get('/user/:id/biblioteca', UserController.getBiblioteca);
+
+
+routerUser.get('/user/:id/avaliacoes', UserController.getAvaliacoes);
+routerUser.post("/user/login", UserController.login);
 
 export default routerUser;
 

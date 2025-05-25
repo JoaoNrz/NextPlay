@@ -1,9 +1,12 @@
 import express from "express";
 import JogosController from "../controllers/JogosController.js";
+import { uploadImageMiddleware } from "../middlewares/middlewares.js"; // importe o middleware
 
 const routerJogos = express.Router();
 
-routerJogos.post("/jogos", JogosController.createJogo);
+// Adicione o middleware do multer na rota de criação
+routerJogos.post("/jogos", uploadImageMiddleware.single('imagem'), JogosController.createJogo);
+
 routerJogos.get("/jogos", JogosController.getAllJogos);
 routerJogos.get("/jogos/titulo/:titulo", JogosController.getJogoByTitulo);
 routerJogos.get("/jogos/categorias/:categorias", JogosController.getJogosByCategorias);

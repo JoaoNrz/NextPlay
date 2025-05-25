@@ -14,6 +14,7 @@ class ReviewsController {
             
         } catch (error) {
             console.error(error);
+            console.log('Erro ao criar a avaliação:', error);
             res.status(500).json({ message: 'Erro ao criar a avaliação' });
         }
     }

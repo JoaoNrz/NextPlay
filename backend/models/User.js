@@ -1,4 +1,5 @@
 import UserModel from "./UserSchema.js";
+import bcrypt from 'bcryptjs';
 
 class User {
 
@@ -15,10 +16,11 @@ class User {
 
     //CREATE
     async save(){
+        const hashedSenha = await bcrypt.hash(this.senha, 10);
         const novoUser = new UserModel({
             nome: this.nome,
             email: this.email,
-            senha: this.senha,
+            senha: hashedSenha, // salva a senha criptografada
             isAdmin: this.isAdmin,
             dataCadastro: this.dataCadastro,
             biblioteca: this.biblioteca,
@@ -47,6 +49,15 @@ class User {
     //buscar por id
     static async findById(id){
         return await UserModel.findById(id);
+    }
+
+    
+    static async findByIdWithWishlist(id){
+        return await UserModel.findById(id).populate('wishlist');
+    }
+
+    static async findByIdWithBiblioteca(id){
+        return await UserModel.findById(id).populate('biblioteca');
     }
 
     //DELETE
