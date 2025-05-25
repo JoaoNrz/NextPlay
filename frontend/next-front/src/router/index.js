@@ -7,6 +7,9 @@ import AdminCreateGame from '../views/AdminCreateGameView.vue'
 import WishlistView from '../views/WishlistView.vue'
 import AvaliacoesView from '../views/AvaliacoesView.vue'
 import UserPageView from '../views/UserPageView.vue'
+import AllUsersView from '../views/AllUsersView.vue'
+import AllGamesView from '../views/AllGamesView.vue'
+import LibraryView from '../views/LibraryView.vue'
 
 const routes = [
   {
@@ -48,6 +51,21 @@ const routes = [
     path: '/user-page/:id',
     name: 'UserPage',
     component: UserPageView,
+  },
+  {
+    path: '/all-users',
+    name: 'AllUsers',
+    component: AllUsersView
+  },
+  {
+    path: '/all-games',
+    name: 'AllGames',
+    component: AllGamesView
+  },
+  {
+    path: '/library',
+    name: 'Library',
+    component: LibraryView
   }
 ]
 

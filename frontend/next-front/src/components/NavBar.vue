@@ -2,10 +2,10 @@
     <aside class="discover-sidebar">
         <nav class="discover-nav">
             <div class="discover-menu">
-                <a href="#">Home</a>
+                <a href="/">Home</a>
             </div>
             <div class="discover-menu">
-                <a href="#">Avaliações</a>
+                <a href="/avaliacoes">Avaliações</a>
             </div>
             <div class="discover-menu">
                 <div class="nickname">
@@ -17,8 +17,7 @@
                 </div>
                 <ul>
                     <li>
-                        <img src="../assets/images/heart.png" alt="">
-                        Wishlist
+                        <a href="/wishlist"><img src="../assets/images/heart.png" alt="">Wishlist</a>
                     </li>
                     <li>
                         <img src="../assets/images/library.png" alt="">
@@ -32,12 +31,12 @@
                 </div>
                 <ul>
                     <li>
-                        <img src="../assets/images/group.png" alt="">
-                        Usuarios
+                        <a href="/all-users"><img src="../assets/images/group.png" alt="">Usuarios</a>
+                        
+                        
                     </li>
                     <li>
-                        <img src="../assets/images/game-controller.png" alt="">
-                        Jogos
+                        <a href="/all-games"><img src="../assets/images/game-controller.png" alt="">Jogos</a>
                     </li>
                 </ul>
             </div>
@@ -107,5 +106,16 @@
     .discover-menu ul li img{
         max-width: 16px;
         margin-right: 8px;
+    }
+
+    .discover-menu ul li a{
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: normal;
+    }
+
+    .discover-menu ul li a:hover{
+        color: rgb(209, 209, 209);
     }
 </style>
