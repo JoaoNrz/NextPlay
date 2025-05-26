@@ -20,6 +20,14 @@
                     <h1>Avaliação:</h1>
                     <span>{{ avalia.nota }}</span>
                 </div>
+                <div class="actions">
+                    <button id="edit-avalia" @click="openEditModal(avalia)">
+                        <img src="../assets/images/editing.png" alt="Editar" />
+                    </button>
+                    <button id="exlude-avalia" @click="deleteReview(avalia._id)">
+                        <img src="../assets/images/delete.png" alt="Excluir" />
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -33,7 +41,9 @@
                         <label for="game">Jogo:</label>
                         <select id="game" v-model="form.game" required>
                             <option disabled value="">Selecione um jogo</option>
-                            <option v-for="game in games" :key="game" :value="game">{{ game }}</option>
+                            <option v-for="game in games" :key="game._id" :value="game._id">
+                                {{ game.titulo }}
+                            </option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -64,38 +74,88 @@ export default {
     data() {
         return {
             showModal: false,
+            editMode: false,
+            editId: null,
             form: {
                 game: '',
                 comentario: '',
                 nota: ''
             },
-            games: [
-                'The Last of Us Part II',
-                'God of War',
-                'Horizon Zero Dawn',
-                'Spider-Man',
-                'Uncharted 4'
-            ],
+            games: [],
             avaliacoes: []
         }
     },
     async mounted() {
         const userId = localStorage.getItem('userId');
         try {
+            // Busca avaliações
             const response = await axiosInstance.get(`/user/${userId}/avaliacoes`);
             this.avaliacoes = response.data;
+            // Busca jogos da biblioteca
+            const respGames = await axiosInstance.get(`/user/${userId}/biblioteca`);
+            this.games = respGames.data;
         } catch (error) {
-            alert('Erro ao buscar avaliações');
+            alert('Erro ao buscar avaliações ou jogos');
         }
     },
     methods: {
         closeModal() {
             this.showModal = false;
+            this.editMode = false;
+            this.editId = null;
             this.form = { game: '', comentario: '', nota: '' };
         },
-        submitForm() {
-            // Aqui você pode adicionar a lógica para salvar a avaliação
-            this.closeModal();
+        openEditModal(avalia) {
+            this.editMode = true;
+            this.editId = avalia._id;
+            this.form = {
+                game: avalia.jogo._id,
+                comentario: avalia.comentario,
+                nota: avalia.nota
+            };
+            this.showModal = true;
+        },
+        async submitForm() {
+            const userId = localStorage.getItem('userId');
+            try {
+                if (this.editMode && this.editId) {
+                    // PUT para editar
+                    await axiosInstance.put(`/reviews/${this.editId}`, {
+                        comentario: this.form.comentario,
+                        nota: this.form.nota,
+                        jogo: this.form.game
+                    });
+                    alert('Avaliação editada com sucesso!');
+                } else {
+                    // POST para criar
+                    await axiosInstance.post('/reviews', {
+                        comentario: this.form.comentario,
+                        nota: this.form.nota,
+                        usuario: userId,
+                        jogo: this.form.game
+                    });
+                    alert('Avaliação criada com sucesso!');
+                }
+                this.closeModal();
+                // Atualiza a lista de avaliações
+                const response = await axiosInstance.get(`/user/${userId}/avaliacoes`);
+                this.avaliacoes = response.data;
+            } catch (error) {
+                console.error(error.response?.data || error);
+                alert('Erro ao salvar avaliação');
+            }
+        },
+        async deleteReview(id) {
+            if (!confirm('Deseja realmente excluir esta avaliação?')) return;
+            const userId = localStorage.getItem('userId');
+            try {
+                await axiosInstance.delete(`/reviews/${id}`);
+                // Atualiza a lista de avaliações
+                const response = await axiosInstance.get(`/user/${userId}/avaliacoes`);
+                this.avaliacoes = response.data;
+            } catch (error) {
+                alert('Erro ao excluir avaliação');
+            }
         }
     }
 }
@@ -229,26 +289,36 @@ export default {
     flex-direction: column;
     gap: 18px;
 }
+ .modal-content form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+ }
+
 .modal-content h2 {
     color: #fff;
     font-size: 22px;
     margin-bottom: 10px;
 }
-.form-group {
+.modal-content .form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
     margin-bottom: 30px;
+    width: 100%;
+    max-width: unset;
 }
-.form-group label {
+.modal-content .form-group label {
     color: #fff;
     font-size: 17px;
-    font-weight: 400;
+    font-weight: 00;
 }
-.form-group select,
-.form-group textarea {
-    background: #1818188f;
-    color: #fff;
+.modal-content .form-group select,
+.modal-content .form-group textarea {
+    background: #1d1d1d42;
+    color: #ffffff;
     border: 1px solid #5e5e5e67;
     border-radius: 5px;
     padding: 15px;

@@ -51,7 +51,7 @@
 
         <!-- Modal -->
         <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-            <div class="modal-content">
+            <div class="modal-content modal-add-game">
                 <h2>Adicionar Jogo</h2>
                 <form @submit.prevent="cadastrarjogo">
     <div class="form-columns">
@@ -422,18 +422,28 @@ export default {
     flex-direction: column;
     gap: 12px;
 }
-.modal-content h2 {
+.modal-add-game.modal-content {
+    background: #242424;
+    padding: 24px 16px;
+    border-radius: 12px;
+    min-width: 520px;
+    max-width: 95vw;
+    box-shadow: 0 2px 16px #00000055;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.modal-add-game h2 {
     color: #fff;
     font-size: 22px;
     margin-bottom: 10px;
 }
-.form-columns {
+.modal-add-game .form-columns {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
 }
-
-.form-group {
+.modal-add-game .form-group {
     flex: 1 1 45%;
     min-width: 180px;
     max-width: 48%;
@@ -442,13 +452,13 @@ export default {
     gap: 4px;
     margin-bottom: 10px;
 }
-.form-group label {
+.modal-add-game .form-group label {
     color: #fcfcfce5;
     font-size: 16px;
     font-weight: 400;
 }
-.form-group input,
-.form-group select {
+.modal-add-game .form-group input,
+.modal-add-game .form-group select {
     background: #1818188f;
     color: #fff;
     border: 1px solid #5e5e5e67;
@@ -456,13 +466,13 @@ export default {
     padding: 15px;
     font-size: 13px;
 }
-.modal-actions {
+.modal-add-game .modal-actions {
     margin-top: 10px;
     display: flex;
     gap: 8px;
     justify-content: flex-end;
 }
-.modal-actions button {
+.modal-add-game .modal-actions button {
     background-color: #a3a3a333;
     color: #fff;
     padding: 12px 28px;
@@ -472,11 +482,11 @@ export default {
     font-size: 15px;
     transition: background 0.2s;
 }
-.modal-actions button[type="submit"] {
+.modal-add-game .modal-actions button[type="submit"] {
     background: linear-gradient(90deg, #005547 0%, #3f82ff 100%);
     border: none;
 }
-.modal-actions button[type="button"] {
+.modal-add-game .modal-actions button[type="button"] {
     background: #444;
     border: none;
 }

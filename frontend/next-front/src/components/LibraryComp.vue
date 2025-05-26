@@ -9,14 +9,6 @@
                 <img :src="getImageUrl(game.imagemURL)" :alt="game.titulo || game.title" />
             </div>
             <div class="game-card-medium-info">
-                <div class="game-card-info-plataforms">
-                    <img
-                        v-for="platform in game.plataformas || game.platforms"
-                        :key="platform"
-                        :src="getPlatformIcon(platform)"
-                        :alt="platform"
-                    />
-                </div>
                 <div class="game-card-info-tittle">
                     <h1>{{ game.titulo || game.title }}</h1>
                 </div>

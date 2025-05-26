@@ -26,10 +26,7 @@
             <h2>Data de cadastro:</h2>
             <p>{{ user ? (new Date(user.dataCadastro).toLocaleDateString('pt-BR')) : '' }}</p>
             <div class="actions-user">
-                <button>
-                    <img src="../assets/images/delete.png" alt="">
-                </button>
-                <button>
+                <button @click="openEditModal">
                     <img src="../assets/images/editing.png" alt="">
                 </button>
             </div>
@@ -40,6 +37,31 @@
         <div class="estatics-card"></div>
         <div class="estatics-card"></div>
     </div>
+
+    <!-- Modal de edição -->
+    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+        <div class="modal-content">
+            <h2>Editar Perfil</h2>
+            <form @submit.prevent="editarUsuario">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input id="nome" v-model="editUser.nome" required type="text" placeholder="Nome do usuário" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input id="email" v-model="editUser.email" required type="email" placeholder="Email do usuário" />
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha:</label>
+                    <input id="senha" v-model="editUser.senha" type="password" placeholder="Nova senha (opcional)" />
+                </div>
+                <div class="modal-actions">
+                    <button type="submit">Salvar</button>
+                    <button type="button" @click="closeModal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -49,7 +71,13 @@ export default {
     name: 'UserPageComp',
     data() {
         return {
-            user: null
+            user: null,
+            showModal: false,
+            editUser: {
+                nome: '',
+                email: '',
+                senha: ''
+            }
         }
     },
     async mounted() {
@@ -60,6 +88,40 @@ export default {
             this.user = response.data;
         } catch (error) {
             alert('Erro ao buscar dados do usuário');
+        }
+    },
+    methods: {
+        openEditModal() {
+            this.editUser = {
+                nome: this.user.nome,
+                email: this.user.email,
+                senha: ''
+            };
+            this.showModal = true;
+        },
+        closeModal() {
+            this.showModal = false;
+            this.editUser = { nome: '', email: '', senha: '' };
+        },
+        async editarUsuario() {
+            const userId = this.$route.params.id;
+            try {
+                // Só envia senha se o campo não estiver vazio
+                const payload = {
+                    nome: this.editUser.nome,
+                    email: this.editUser.email
+                };
+                if (this.editUser.senha) {
+                    payload.senha = this.editUser.senha;
+                }
+                await axiosInstance.put(`/user/${userId}`, payload);
+                // Atualiza os dados na tela
+                this.user = { ...this.user, ...payload };
+                this.closeModal();
+                alert('Perfil atualizado com sucesso!');
+            } catch (error) {
+                alert('Erro ao atualizar perfil');
+            }
         }
     }
 }
@@ -178,5 +240,73 @@ export default {
     padding: 8px 22px;
     border-radius: 5px;
     background-color: #3a3a3a4d;
+}
+
+/* Estilos do modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal-actions button[type="submit"] {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.modal-actions button[type="button"] {
+    background-color: #dc3545;
+    color: #fff;
 }
 </style>
