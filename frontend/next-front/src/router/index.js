@@ -11,6 +11,7 @@ import AllUsersView from '../views/AllUsersView.vue'
 import AllGamesView from '../views/AllGamesView.vue'
 import LibraryView from '../views/LibraryView.vue'
 import RedefiView from '@/views/RedefiView.vue'
+import CreateContView from '../views/CreateContView.vue'
 
 const routes = [
   {
@@ -71,6 +72,11 @@ const routes = [
     path: '/redefinir-senha',
     name: 'Redefi',
     component: RedefiView
+  },
+  {
+    path: '/criar-conta',
+    name: 'CreateCont',
+    component: CreateContView
   }
 ]
 
@@ -81,7 +87,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!localStorage.getItem('token');
-  const publicPages = ['Login', 'Redefi'];
+  const publicPages = ['Login', 'Redefi', 'CreateCont'];
   if (!publicPages.includes(to.name) && !isAuthenticated) {
     next({ name: 'Login' });
   } else if (to.name === 'Login' && isAuthenticated) {
