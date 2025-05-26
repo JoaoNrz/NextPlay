@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'; // ✅ Nome correto
+import mongoose from 'mongoose'; 
 
 const UserSchema = new mongoose.Schema({ // agora usa mongoose aqui também
     nome: {
