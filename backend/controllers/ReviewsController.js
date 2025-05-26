@@ -8,6 +8,7 @@ class ReviewsController {
     static async createReview(req, res) {
         try {
             const { comentario,nota,usuario,jogo } = req.body;
+            console.log('Dados recebidos para criar a avaliação:', { comentario, nota, usuario, jogo });
             const novaReview = new Reviews(comentario, nota, usuario, jogo);
             await novaReview.save();
             res.status(201).json({ message: 'Avaliação criada com sucesso!', review: novaReview });

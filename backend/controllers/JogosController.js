@@ -108,8 +108,28 @@ class JogosController {
     static async updateJogoById(req, res) {
         try {
             const { id } = req.params;
-            const { titulo, descricao, imagemURL, dataLancamento, preco, categorias, desenvolvedores, plataformas, metacritic, avaliacoes } = req.body;
-            const jogo = await Jogos.updateJogo(id, { titulo, descricao, imagemURL, dataLancamento, preco, categorias, desenvolvedores, plataformas, metacritic, avaliacoes }, { new: true });
+            const body = req.body || {};
+
+            // Se o upload de imagem foi feito, pega o novo caminho, senão mantém o antigo
+            const imagemURL = req.file ? `/uploads/${req.file.filename}` : body.imagemURL;
+
+            const {
+                titulo,
+                descricao,
+                dataLancamento,
+                preco,
+                categorias,
+                desenvolvedores,
+                plataformas,
+                metacritic,
+                avaliacoes
+            } = body;
+
+            const jogo = await Jogos.updateJogo(
+                id,
+                { titulo, descricao, imagemURL, dataLancamento, preco, categorias, desenvolvedores, plataformas, metacritic, avaliacoes },
+                { new: true }
+            );
             if (!jogo) {
                 return res.status(404).json({ message: 'Jogo não encontrado' });
             }
