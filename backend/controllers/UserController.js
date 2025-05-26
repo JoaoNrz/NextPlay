@@ -95,7 +95,14 @@ class UserController {
     static async updateUser(req, res) {
         try {
             const { id } = req.params;
-            const updateData = req.body;
+            const updateData = { ...req.body };
+
+            // Se senha foi enviada, criptografa antes de atualizar
+            if (updateData.senha) {
+                const bcrypt = await import('bcryptjs'); // ou use import direto no topo do arquivo
+                updateData.senha = await bcrypt.default.hash(updateData.senha, 10);
+            }
+
             const usuarioAtualizado = await User.updateUser(id, updateData);
             if (!usuarioAtualizado) {
                 return res.status(404).json({ message: 'Usuário não encontrado.' });
