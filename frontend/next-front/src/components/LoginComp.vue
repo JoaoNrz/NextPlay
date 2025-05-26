@@ -10,6 +10,12 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" v-model="password" required />
             </div>
+            <!-- Link para redefinir senha -->
+            <div class="forgot-password-link">
+                <span @click="goToRedefi" style="color:#ff8c3f;cursor:pointer;text-decoration:underline;">
+                    Esqueceu sua senha?
+                </span>
+            </div>
             <button type="submit">Login</button>
         </form>
     </div>
@@ -18,36 +24,37 @@
 <script>
 import axiosInstance from '../services/axiosInstance.js';
 
-
-    export default{
-        name:'LoginComp',
-        data() {
-            return {
-                email: '',
-                password: ''
+export default {
+    name:'LoginComp',
+    data() {
+        return {
+            email: '',
+            password: ''
+        }
+    },
+    methods: {
+        async login() {
+            try {
+                const response = await axiosInstance.post('/user/login', {
+                    email: this.email,
+                    senha: this.password
+                });
+                // Supondo que o backend retorna { token, nome }
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('userName', response.data.usuario.nome); // <-- Aqui salva o nome
+                localStorage.setItem('userId', response.data.usuario._id); // <-- Aqui salva o userId do MongoDB
+                localStorage.setItem('isAdmin', response.data.usuario.isAdmin); // <-- Aqui salva o isAdmin do MongoDB
+                this.$router.push({ name: 'Home' });
+            } catch (error) {
+                // Trate o erro de login
+                console.error("Erro ao fazer login:", error);
             }
         },
-        methods: {
-            async login() {
-                try {
-                    const response = await axiosInstance.post('/user/login', {
-                        email: this.email,
-                        senha: this.password
-                    });
-                    // Supondo que o backend retorna { token, nome }
-                    localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('userName', response.data.usuario.nome); // <-- Aqui salva o nome
-                    localStorage.setItem('userId', response.data.usuario._id); // <-- Aqui salva o userId do MongoDB
-                    localStorage.setItem('isAdmin', response.data.usuario.isAdmin); // <-- Aqui salva o isAdmin do MongoDB
-                    this.$router.push({ name: 'Home' });
-                } catch (error) {
-                    // Trate o erro de login
-                    console.error("Erro ao fazer login:", error);
-                }
-            }
+        goToRedefi() {
+            this.$router.push({ name: 'Redefi' });
         }
     }
-
+}
 </script>
 
 <style scoped>
@@ -100,5 +107,9 @@ import axiosInstance from '../services/axiosInstance.js';
         font-weight: bold;
     }
 
-    
+    .forgot-password-link {
+        width: 100%;
+        text-align: right;
+        margin-bottom: 10px;
+    }
 </style>

@@ -1,18 +1,18 @@
 <template>
     <div class="container-login">
         <h1>Redefinir Senha</h1>
-        <form>
+        <form @submit.prevent="redefinirSenha">
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" required />
+                <input type="email" id="email" v-model="email" required />
             </div>
             <div class="form-group">
                 <label for="new-password">Nova Senha:</label>
-                <input type="password" id="new-password" required />
+                <input type="password" id="new-password" v-model="newPassword" required />
             </div>
             <div class="form-group">
                 <label for="confirm-password">Confirmar Nova Senha:</label>
-                <input type="password" id="confirm-password" required />
+                <input type="password" id="confirm-password" v-model="confirmPassword" required />
             </div>
             <button type="submit">Redefinir Senha</button>
         </form>
@@ -20,8 +20,40 @@
 </template>
 
 <script>
+import axiosInstance from '../services/axiosInstance.js';
+
 export default {
-    name: 'RedefiComp'
+    name: 'RedefiComp',
+    data() {
+        return {
+            email: '',
+            newPassword: '',
+            confirmPassword: ''
+        }
+    },
+    methods: {
+        async redefinirSenha() {
+            if (this.newPassword !== this.confirmPassword) {
+                alert('As senhas não coincidem!');
+                return;
+            }
+            try {
+                // Buscar usuário pelo email
+                const response = await axiosInstance.get(`/user/email/${this.email}`);
+                const user = response.data;
+                if (!user || !user._id) {
+                    alert('Usuário não encontrado!');
+                    return;
+                }
+                // Atualizar senha
+                await axiosInstance.put(`/user/${user._id}`, { senha: this.newPassword });
+                alert('Senha redefinida com sucesso!');
+                this.$router.push({ name: 'Login' });
+            } catch (error) {
+                alert('Erro ao redefinir senha.');
+            }
+        }
+    }
 }
 </script>
 

@@ -81,7 +81,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!localStorage.getItem('token');
-  if (to.name !== 'Login' && !isAuthenticated) {
+  const publicPages = ['Login', 'Redefi'];
+  if (!publicPages.includes(to.name) && !isAuthenticated) {
     next({ name: 'Login' });
   } else if (to.name === 'Login' && isAuthenticated) {
     next({ name: 'Home' });
