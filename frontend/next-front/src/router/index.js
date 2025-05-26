@@ -10,6 +10,7 @@ import UserPageView from '../views/UserPageView.vue'
 import AllUsersView from '../views/AllUsersView.vue'
 import AllGamesView from '../views/AllGamesView.vue'
 import LibraryView from '../views/LibraryView.vue'
+import RedefiView from '@/views/RedefiView.vue'
 
 const routes = [
   {
@@ -66,6 +67,10 @@ const routes = [
     path: '/library',
     name: 'Library',
     component: LibraryView
+  },{
+    path: '/redefinir-senha',
+    name: 'Redefi',
+    component: RedefiView
   }
 ]
 
